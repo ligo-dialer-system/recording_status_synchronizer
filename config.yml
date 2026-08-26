@@ -1,0 +1,24 @@
+database:
+  sqlserver:
+    driver: "ODBC Driver 17 for SQL Server"
+    server: "172.28.200.77"
+    database: "FLEX_AYTYRECORDMANAGERDB"
+    uid: "aytyapp"
+    pwd: "#4YTY_4pp#"
+  mysql:
+    host: "172.28.200.37"
+    user: "root"
+    password: "a1t1crm"
+    db: "aytyipbxdb"
+
+paths:
+  source_rep: "/usr/local/aytytech/var/log/asterisk/aytycrm/recording/copy_rec_success/"
+  log_dir: "/usr/local/aytytech/var/log/recording_status_sync/"
+  lock_file: "/usr/local/aytytech/var/log/recording_status_sync/rec_status_sync.lock"
+
+retry:
+  max_retries: 5
+  backoff_seconds: [300, 900, 3600, 21600, 86400]
+
+logging:
+  level: "INFO"
