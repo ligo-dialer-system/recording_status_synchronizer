@@ -172,7 +172,7 @@ Configurado por [log_manager/log_config.py](log_manager/log_config.py) (`LogConf
 Cole o repositorio dentro da pasta microservices
 
 ```bash
-cd /etc/asterisk/ayty_dialplan/system/core/microservices/recording_status_synchronizer/
+cd /etc/asterisk/ayty_dialplan/system/core/microservices/
 cd recording_status_synchronizer/
 python3 -m venv .venv --prompt "recording_status_synchronizer" 
 source .venv/bin/activate
