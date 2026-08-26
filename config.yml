@@ -1,14 +1,14 @@
 database:
   sqlserver:
     driver: "ODBC Driver 17 for SQL Server"
-    server: "172.28.200.77"
-    database: "FLEX_AYTYRECORDMANAGERDB"
-    uid: "aytyapp"
-    pwd: "#4YTY_4pp#"
+    server: "1.1.1"
+    database: "AYTYRECORDMANAGERDB"
+    uid: "user"
+    pwd: "password"
   mysql:
-    host: "172.28.200.37"
-    user: "root"
-    password: "a1t1crm"
+    host: "2.2.2.2"
+    user: "user"
+    password: "password"
     db: "aytyipbxdb"
 
 paths:
@@ -20,5 +20,8 @@ retry:
   max_retries: 5
   backoff_seconds: [300, 900, 3600, 21600, 86400]
 
+processing:
+  min_file_age_seconds: 300
+
 logging:
-  level: "INFO"
+  level: "DEBUG"

@@ -30,8 +30,13 @@ def process_line(fields):
 def process_pending_file(project_dir, path, backoff_seconds):
     log.info(f"[ARQUIVO_PROCESSANDO] processando arquivo: {path}")
     had_failure = False
-    with open(path, "r") as f:
-        linhas = f.readlines()
+    try:
+        with open(path, "r") as f:
+            linhas = f.readlines()
+    except FileNotFoundError:
+        log.warning(f"[ARQUIVO_SUMIU] arquivo pendente desapareceu antes da leitura "
+                    f"(provavelmente removido por processo externo): {path}")
+        return
     for linha in linhas:
         if not linha.strip():
             continue
@@ -50,8 +55,8 @@ def process_pending_file(project_dir, path, backoff_seconds):
         move_file(path, os.path.join(project_dir, "copy_log_success"))
 
 
-def process_pending(project, project_dir, backoff_seconds):
-    for path in list_pending_files(project_dir):
+def process_pending(project, project_dir, backoff_seconds, min_age_seconds):
+    for path in list_pending_files(project_dir, min_age_seconds):
         try:
             process_pending_file(project_dir, path, backoff_seconds)
         except Exception:
@@ -63,12 +68,13 @@ def read_file():
     source_rep = config["paths"]["source_rep"]
     backoff_seconds = config["retry"]["backoff_seconds"]
     max_retries = config["retry"]["max_retries"]
+    min_age_seconds = config["processing"]["min_file_age_seconds"]
 
     for project in list_projects(source_rep):
         project_dir = os.path.join(source_rep, project)
         try:
             process_retry_queue(project_dir, backoff_seconds, max_retries, process_line)
-            process_pending(project, project_dir, backoff_seconds)
+            process_pending(project, project_dir, backoff_seconds, min_age_seconds)
         except Exception:
             log.exception(f"[PROJETO_ERRO] falha ao processar projeto {project}")
 

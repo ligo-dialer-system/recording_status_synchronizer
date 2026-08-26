@@ -2,7 +2,7 @@ import fcntl
 import logging
 import os
 import shutil
-from datetime import datetime
+import time
 
 log = logging.getLogger("logger_file")
 
@@ -27,18 +27,18 @@ def list_projects(source_rep):
         return [entry.name for entry in entries if entry.is_dir()]
 
 
-def list_pending_files(project_dir):
+def list_pending_files(project_dir, min_age_seconds):
     pending_dir = os.path.join(project_dir, "copy_log_pending")
     if not os.path.isdir(pending_dir):
         return []
-    now_minute = datetime.now().strftime("%H:%M")
+    now = time.time()
     files = []
     with os.scandir(pending_dir) as entries:
         for entry in entries:
             if not entry.is_file():
                 continue
             mtime = entry.stat().st_mtime
-            if datetime.fromtimestamp(mtime).strftime("%H:%M") == now_minute:
+            if now - mtime < min_age_seconds:
                 continue
             files.append((mtime, entry.path))
     files.sort(key=lambda item: item[0])
